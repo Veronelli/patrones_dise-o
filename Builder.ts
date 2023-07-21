@@ -10,7 +10,7 @@ class SedanProductionLineTS implements CarProductLineTS{
     private _sedanProductionLine!: BaseCarTS;
     private _model!: string;
 
-    constructor({model}){
+    constructor({model}:any){
         this._model = model;
         this.resetProductionLine();
     }
@@ -34,6 +34,13 @@ class SedanProductionLineTS implements CarProductLineTS{
     resetProductionLine(): void {
         this._sedanProductionLine = this._model === 'Nivus' ? new NivusCarTS() : new TcrossCarTS();
 
+    }
+
+    build(): BaseCarTS{
+        this.setModel();
+        const sedanProductionLine = this._sedanProductionLine;
+        this.resetProductionLine();
+        return sedanProductionLine;
     }
 
 }
@@ -79,3 +86,46 @@ class BaseCarTS{
 
 class NivusCarTS extends BaseCarTS{}
 class TcrossCarTS extends BaseCarTS{}
+
+class DirectorTS{
+    private productionLine!: CarProductLineTS;
+
+    setProductionLine(productionLine: CarProductLineTS):void{
+        this.productionLine = productionLine;
+
+    }
+
+    constructCvtEdition():void{
+        this.productionLine
+        .setAirBags(4)
+        .setColor("BLACK")
+        .setEdition("CVT");
+    }
+
+    constructSignatureEdition():void {
+        this.productionLine
+        .setAirBags(6)
+        .setColor("RED")
+        .setEdition("SIGNATURE");
+    }
+}
+
+function appBuilderTS(director: DirectorTS): void{
+    const tcrossSedanProductionLine = new SedanProductionLineTS(
+        {
+            model:'Tcross'
+        });
+
+    director.setProductionLine(tcrossSedanProductionLine);
+    director.constructCvtEdition();
+    const tcrossSedanCVT = tcrossSedanProductionLine.build();
+    console.log(tcrossSedanCVT);
+
+    director.constructSignatureEdition();
+    const tcrossSedanSignature = tcrossSedanProductionLine.build();
+    console.log(tcrossSedanSignature);
+    
+    
+}
+
+appBuilderTS(new DirectorTS())
