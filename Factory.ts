@@ -1,14 +1,14 @@
 interface BaseCarTS{
-    showCar():void;
+    showCar(): string;
 }
 
-class CarNivusTS implements BaseCarTS{
+class CarNivusTS extends BaseCarTS{
     showCar(): string{
         return "Nivus";
     }
 }
 
-class CarTcrossTS implements BaseCarTS{
+class CarTcrossTS extends BaseCarTS{
     showCar(): string {
         return "TCross"
     }
